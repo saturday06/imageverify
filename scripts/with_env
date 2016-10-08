@@ -1,0 +1,11 @@
+#!/bin/sh
+
+prefix=$(cd `dirname $0`; cd ../external; pwd)
+
+export CPPFLAGS="-I$prefix/include $CPPFLAGS"
+export LDFLAGS="-L$prefix/lib $LDFLAGS"
+export PATH="$prefix/bin:$PATH"
+export LD_LIBRARY_PATH="$prefix/lib"
+export PKG_CONFIG_PATH="$prefix/lib/pkgconfig"
+
+exec "$@"

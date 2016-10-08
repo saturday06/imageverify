@@ -1,0 +1,17 @@
+/*-prefix/
+/*.dylib
+/.cproject
+/.project
+/CMakeCache.txt
+/CMakeFiles/
+/CTestTestfile.cmake
+/Makefile
+/Testing/
+/bin/
+/build.ninja
+/cmake_install.cmake
+/external/
+/lib*.a
+/lib*.so
+/rules.ninja
+.DS_Store

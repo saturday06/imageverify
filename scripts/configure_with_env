@@ -1,0 +1,5 @@
+#!/bin/sh
+
+base=$(cd `dirname $0`; cd ..; pwd)
+
+exec $base/scripts/with_env ./configure --prefix=$base/external "$@"
