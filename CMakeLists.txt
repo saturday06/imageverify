@@ -26,6 +26,11 @@ if(APPLE)
   )
 endif()
 
+if(UNIX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
+endif()
+
 link_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/external/lib
   ${CMAKE_CURRENT_SOURCE_DIR}/external/src/external_gtest-build/googlemock/gtest
