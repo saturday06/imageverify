@@ -107,6 +107,35 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
+  external_libffi
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+)
+
+ExternalProject_Add(
+  external_gettext
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.8.1.tar.gz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_pkg_config
+)
+
+ExternalProject_Add(
+  external_glib
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL http://ftp.gnome.org/pub/gnome/sources/glib/2.50/glib-2.50.2.tar.xz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env --disable-libmount --with-pcre=internal --enable-static
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_gettext external_libffi
+)
+
+ExternalProject_Add(
   external_freetype_early
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
   URL http://download.sourceforge.net/freetype/freetype2/2.7/freetype-2.7.tar.gz
@@ -123,7 +152,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ../../../scripts/configure_with_env --disable-shared --enable-static --with-freetype=yes
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
-  DEPENDS external_freetype_early
+  DEPENDS external_freetype_early external_glib
 )
 
 ExternalProject_Add(
@@ -134,15 +163,6 @@ ExternalProject_Add(
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
   DEPENDS external_harfbuzz
-)
-
-ExternalProject_Add(
-  external_libffi
-  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
-  URL ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
-  CONFIGURE_COMMAND ../../../scripts/configure_with_env
-  BUILD_COMMAND make
-  BUILD_IN_SOURCE 1
 )
 
 ExternalProject_Add(
@@ -185,37 +205,26 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
-  external_gettext
-  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
-  URL http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.8.1.tar.gz
-  CONFIGURE_COMMAND ../../../scripts/configure_with_env
-  BUILD_COMMAND make
-  BUILD_IN_SOURCE 1
-  DEPENDS external_pkg_config
-)
-
-ExternalProject_Add(
-  external_glib
-  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
-  URL http://ftp.gnome.org/pub/gnome/sources/glib/2.50/glib-2.50.2.tar.xz
-  CONFIGURE_COMMAND ../../../scripts/configure_with_env --disable-libmount --with-pcre=internal --enable-static
-  BUILD_COMMAND make
-  BUILD_IN_SOURCE 1
-  DEPENDS external_gettext
-)
-
-ExternalProject_Add(
   external_pango
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
   URL http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.3.tar.xz
-  CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-introspection=no --enable-static
-  BUILD_COMMAND make
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-introspection=no --enable-static --without-cairo
+  BUILD_COMMAND ../../../scripts/with_env make
   BUILD_IN_SOURCE 1
   DEPENDS external_freetype external_harfbuzz external_glib
 )
 
 add_dependencies(imageverify
-  external_raqm
+  imageverify_static
+  imageverify_shared
+)
+
+add_dependencies(imageverify_static
+  imageverify_shared
+)
+
+add_dependencies(imageverify_shared
+  external_pkg_config
   external_fribidi
   external_fontconfig
   external_libjpeg_turbo
@@ -227,8 +236,8 @@ add_dependencies(imageverify
   external_pango
 )
 
-add_dependencies(imageverify_test external_gtest)
+add_dependencies(imageverify_test imageverify external_gtest)
 
 target_link_libraries(imageverify_shared jpeg freetype raqm)
-target_link_libraries(imageverify gtest gtest_main jpeg pantoft2 freetype raqm)
-target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2 freetype raqm)
+target_link_libraries(imageverify gtest gtest_main jpeg pangoft2-1.0 freetype raqm)
+target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2-1.0 freetype raqm)
