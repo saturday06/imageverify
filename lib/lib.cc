@@ -1,12 +1,50 @@
 #include <stdio.h>
+#include <string.h>
+#include <pango/pangoft2.h>
 #include <raqm.h>
-
+#include <freetype2/ft2build.h>
+#include FT_BITMAP_H
 #include "imageverify.h"
 
 int image_verify()
 {
+  PangoContext* context = NULL;
+  PangoLayout* layout = NULL;
+  PangoFontDescription* font_desc = NULL;
+  PangoFontMap* font_map = NULL;
+  FT_Bitmap bmp = {0};
+  int stride = 0;
+  int width = 640;
+  int height = 480;
+  FT_Bitmap_New(&bmp);
+  bmp.rows = height;
+  bmp.width = width;
+  font_map = pango_ft2_font_map_new();
+  if (NULL == font_map) {
+    printf("+ error: cannot create the pango font map.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  context = pango_font_map_create_context(font_map);
+  if (NULL == context) {
+    printf("+ error: cannot create pango font context.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  /* create layout object. */
+  layout = pango_layout_new(context);
+  if (NULL == layout) {
+    printf("+ error: cannot create the pango layout.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  pango_layout_set_text(layout, "hello", -1);
+
+  /* render */
+  pango_ft2_render_layout(&bmp, layout, 0, 0);
+
 	int argc = 4;
-	char* argv[] = {
+	const char* argv[] = {
 			"prog",
 			"/Users/saturday06/Downloads/f/google-fonts/ufl/ubuntu/Ubuntu-Regular.ttf",
 			"Hello",
@@ -74,6 +112,7 @@ int image_verify()
     if (glyphs == NULL)
         goto final;
 
+
     for (i = 0; i < count; i++)
     {
         printf ("%d %d %d %d %d %d\n",
@@ -86,6 +125,7 @@ int image_verify()
     }
 
     ret = 0;
+
 
 final:
     raqm_destroy (rq);

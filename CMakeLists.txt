@@ -12,6 +12,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/external/include
   ${CMAKE_CURRENT_SOURCE_DIR}/external/include/freetype2
+  ${CMAKE_CURRENT_SOURCE_DIR}/external/include/pango-1.0
+  ${CMAKE_CURRENT_SOURCE_DIR}/external/include/glib-2.0
+  ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/glib-2.0/include
   ${CMAKE_CURRENT_SOURCE_DIR}/external/src/external_gtest/googletest/include
 )
 
@@ -238,6 +241,6 @@ add_dependencies(imageverify_shared
 
 add_dependencies(imageverify_test imageverify external_gtest)
 
-target_link_libraries(imageverify_shared jpeg freetype raqm)
-target_link_libraries(imageverify gtest gtest_main jpeg pangoft2-1.0 freetype raqm)
-target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2-1.0 freetype raqm)
+target_link_libraries(imageverify_shared jpeg pangoft2-1.0 pango-1.0 freetype raqm)
+target_link_libraries(imageverify gtest gtest_main jpeg pangoft2-1.0 pango-1.0 freetype raqm)
+target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2-1.0 pango-1.0 freetype raqm)
