@@ -3,20 +3,16 @@
 #include <string.h>
 #include <jpeglib.h>
 #include <png.h>
+#include <string>
+#include <fribidi/fribidi.h>
+#include <ft2build.h>
+#include FT_BITMAP_H
+#include FT_FREETYPE_H
+#include <raqm.h>
+
 #include "imageverify.h"
 
 int image_verify() {
-/*
-    std::puts("Hello");
-    jpeg_decompress_struct dinfo;
-    jpeg_error_mgr jerr;
-
-    dinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_decompress(&dinfo);
-    jpeg_stdio_src(&dinfo, stdin);
-    jpeg_start_decompress(&dinfo);
-    jpeg_finish_decompress(&dinfo);
-    jpeg_destroy_decompress(&dinfo);
-*/
+	puts("Hello!");
     return 0;
 }

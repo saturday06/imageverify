@@ -11,6 +11,7 @@ set(ENV{PKG_CONFIG_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/pkgconfig")
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/external/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/external/include/freetype2
   ${CMAKE_CURRENT_SOURCE_DIR}/external/src/external_gtest/googletest/include
 )
 
@@ -29,7 +30,7 @@ endif()
 
 link_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/external/lib
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/src/external_gtest-build/googlemock/gtest
+  ${CMAKE_CURRENT_SOURCE_DIR}/external/src/external_gtest/googlemock/gtest
 )
 
 aux_source_directory(app app_sources)
