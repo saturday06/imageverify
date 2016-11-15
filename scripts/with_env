@@ -3,6 +3,8 @@
 prefix=$(cd `dirname $0`; cd ../external; pwd)
 
 export CPPFLAGS="-I$prefix/include $CPPFLAGS"
+export CFLAGS="-O0 -g $CFLAGS"
+export CXXFLAGS="-O0 -g $CXXFLAGS"
 export LDFLAGS="-L$prefix/lib $LDFLAGS"
 export PATH="$prefix/bin:$PATH"
 export LD_LIBRARY_PATH="$prefix/lib"
