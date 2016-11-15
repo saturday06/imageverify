@@ -184,6 +184,36 @@ ExternalProject_Add(
   DEPENDS external_freetype external_harfbuzz external_fribidi
 )
 
+ExternalProject_Add(
+  external_gettext
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.8.1.tar.gz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_pkg_config
+)
+
+ExternalProject_Add(
+  external_glib
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL http://ftp.gnome.org/pub/gnome/sources/glib/2.50/glib-2.50.2.tar.xz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env --disable-libmount --with-pcre=internal --enable-static
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_gettext
+)
+
+ExternalProject_Add(
+  external_pango
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.3.tar.xz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-introspection=no --enable-static
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_freetype external_harfbuzz external_glib
+)
+
 add_dependencies(imageverify
   external_raqm
   external_fribidi
@@ -193,9 +223,12 @@ add_dependencies(imageverify
   external_libffi
   external_expat
   external_harfbuzz
+  external_raqm
+  external_pango
 )
 
 add_dependencies(imageverify_test external_gtest)
 
-target_link_libraries(imageverify jpeg)
-target_link_libraries(imageverify_test gtest gtest_main)
+target_link_libraries(imageverify_shared jpeg freetype raqm)
+target_link_libraries(imageverify gtest gtest_main jpeg pantoft2 freetype raqm)
+target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2 freetype raqm)
