@@ -9,17 +9,13 @@ set(ENV{LD_LIBRARY_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/external/lib")
 set(ENV{PKG_CONFIG_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/pkgconfig")
 
 include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/external/include
   ${CMAKE_CURRENT_SOURCE_DIR}/external/src/external_gtest/googletest/include
 )
 
 if(APPLE)
   include_directories(
-    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks
-    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include
-    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include/c++/4.2.1
-    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
-    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/7.3.0/include
     /Library/Developer/CommandLineTools/usr/include
     /Library/Developer/CommandLineTools/usr/include/c++/v1
     /Library/Developer/CommandLineTools/usr/lib/clang/7.3.0/include
@@ -103,7 +99,7 @@ ExternalProject_Add(
   external_libjpeg_turbo
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
   URL https://download.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
-  CONFIGURE_COMMAND ../bin/configure_with_env
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
   DEPENDS external_pkg_config
@@ -122,7 +118,7 @@ ExternalProject_Add(
 ExternalProject_Add(
   external_harfbuzz
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
-  URL https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.2.tar.bz2
+  URL https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.3.tar.bz2
   CONFIGURE_COMMAND ../../../scripts/configure_with_env --disable-shared --enable-static --with-freetype=yes
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
@@ -151,7 +147,7 @@ ExternalProject_Add(
 ExternalProject_Add(
   external_expat
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
-  URL http://download.sourceforge.net/expat/expat-2.1.1.tar.bz2
+  URL http://download.sourceforge.net/expat/expat-2.2.0.tar.bz2
   CONFIGURE_COMMAND ../../../scripts/configure_with_env
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
