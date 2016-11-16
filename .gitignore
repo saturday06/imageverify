@@ -1,9 +1,12 @@
 /*-prefix/
 /*.dylib
+/*.build/
+/*.xcodeproj/
 /.cproject
 /.project
 /CMakeCache.txt
 /CMakeFiles/
+/CMakeScripts/
 /CTestTestfile.cmake
 /Makefile
 /Testing/

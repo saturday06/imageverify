@@ -20,9 +20,9 @@ include_directories(
 
 if(APPLE)
   include_directories(
-    /Library/Developer/CommandLineTools/usr/include
-    /Library/Developer/CommandLineTools/usr/include/c++/v1
-    /Library/Developer/CommandLineTools/usr/lib/clang/7.3.0/include
+#    /Library/Developer/CommandLineTools/usr/include
+#    /Library/Developer/CommandLineTools/usr/include/c++/v1
+#    /Library/Developer/CommandLineTools/usr/lib/clang/7.3.0/include
   )
 endif()
 
@@ -104,7 +104,7 @@ ExternalProject_Add(
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
   URL https://download.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
   CONFIGURE_COMMAND ../../../scripts/configure_with_env
-  BUILD_COMMAND make
+  BUILD_COMMAND ../../../scripts/with_env make
   BUILD_IN_SOURCE 1
   DEPENDS external_pkg_config
 )
@@ -178,16 +178,6 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
-  external_fontconfig
-  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
-  URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.1.tar.gz
-  CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-static
-  BUILD_COMMAND make
-  BUILD_IN_SOURCE 1
-  DEPENDS external_freetype external_expat external_libffi
-)
-
-ExternalProject_Add(
   external_fribidi
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
   URL http://fribidi.org/download/fribidi-0.19.7.tar.bz2
@@ -195,6 +185,16 @@ ExternalProject_Add(
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
   DEPENDS external_freetype external_harfbuzz
+)
+
+ExternalProject_Add(
+  external_fontconfig
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.1.tar.gz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-static
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_freetype external_expat external_libffi external_fribidi
 )
 
 ExternalProject_Add(
@@ -214,7 +214,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-introspection=no --enable-static --without-cairo
   BUILD_COMMAND ../../../scripts/with_env make
   BUILD_IN_SOURCE 1
-  DEPENDS external_freetype external_harfbuzz external_glib
+  DEPENDS external_freetype external_harfbuzz external_glib external_fontconfig
 )
 
 add_dependencies(imageverify
