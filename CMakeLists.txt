@@ -194,6 +194,7 @@ ExternalProject_Add(
   URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.1.tar.gz
   CONFIGURE_COMMAND ../../../scripts/configure_with_env --enable-static
   BUILD_COMMAND make
+  INSTALL_COMMAND make install RUN_FC_CACHE_TEST=false
   BUILD_IN_SOURCE 1
   DEPENDS external_freetype external_expat external_libffi external_fribidi
 )
