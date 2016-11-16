@@ -19,7 +19,7 @@ include_directories(
 )
 
 if(APPLE)
-  include_directories(
+#  include_directories(
 #    /Library/Developer/CommandLineTools/usr/include
 #    /Library/Developer/CommandLineTools/usr/include/c++/v1
 #    /Library/Developer/CommandLineTools/usr/lib/clang/7.3.0/include
@@ -59,6 +59,7 @@ ExternalProject_Add(
   URL https://github.com/google/googletest/archive/release-1.8.0.zip
   BUILD_COMMAND ../../../scripts/with_env make
   BUILD_IN_SOURCE 1
+  CMAKE_GENERATOR Unix Makefiles
 )
 
 ExternalProject_Add(
@@ -226,21 +227,9 @@ add_dependencies(imageverify_static
   imageverify_shared
 )
 
-add_dependencies(imageverify_shared
-  external_pkg_config
-  external_fribidi
-  external_fontconfig
-  external_libjpeg_turbo
-  external_freetype
-  external_libffi
-  external_expat
-  external_harfbuzz
-  external_raqm
-  external_pango
-)
 
 add_dependencies(imageverify_test imageverify external_gtest)
 
 target_link_libraries(imageverify_shared jpeg pangoft2-1.0 pango-1.0 freetype raqm)
-target_link_libraries(imageverify gtest gtest_main jpeg pangoft2-1.0 pango-1.0 freetype raqm)
+target_link_libraries(imageverify jpeg pangoft2-1.0 pango-1.0 freetype raqm)
 target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2-1.0 pango-1.0 freetype raqm)
