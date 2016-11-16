@@ -227,6 +227,18 @@ add_dependencies(imageverify_static
   imageverify_shared
 )
 
+add_dependencies(imageverify_shared
+  external_pkg_config
+  external_fribidi
+  external_fontconfig
+  external_libjpeg_turbo
+  external_freetype
+  external_libffi
+  external_expat
+  external_harfbuzz
+  external_raqm
+  external_pango
+)
 
 add_dependencies(imageverify_test imageverify external_gtest)
 
