@@ -118,8 +118,8 @@ int image_verify() {
         return 1;
     }
     
-    FcChar8 utf8[] = "日本語helloالسلام🍣🍺";
-    int fontSize = 64;
+    FcChar8 utf8[] = "日本語helloالسلام🍣👍🏿🍺👨‍👩‍👧‍👦👍🏻てすとてすと☺️😇";
+    int fontSize = 32;
 
     int ucs4Len;
     int utf8MaxWidth;
@@ -266,21 +266,15 @@ int image_verify() {
         // See https://github.com/googlei18n/fontview/issues/2 for pictures.
         double glyphX = xbase + glyph.x_offset / 64.0 * factor;
         double glyphY = ybase - glyph.y_offset / 64.0 * factor;
+        int xadvance = glyph.x_advance * factor;
+        int yadvance = glyph.y_advance * factor;
 
         auto er = FT_Load_Glyph(glyph.ftface, glyph.index, FT_LOAD_RENDER | FT_LOAD_COLOR);
         if (er) {
-            printf("errora %d\n", er);
-            return 1;
-        }
-
-        if (!glyph.ftface->glyph) {
-            printf("errorb\n");
-            return 1;
-        }
-        
-        int xadvance = glyph.x_advance * factor;
-        int yadvance = glyph.y_advance * factor;
-        if (glyph.ftface->glyph->bitmap.width > 0 && glyph.ftface->glyph->bitmap.rows > 0) {
+            printf("error1 %d\n", er);
+        } else if (!glyph.ftface->glyph) {
+            printf("error2\n");
+        } else if (glyph.ftface->glyph->bitmap.width > 0 && glyph.ftface->glyph->bitmap.rows > 0) {
             double xPos = xbase;
             double yPos = ybase;
             xPos += glyph.ftface->glyph->bitmap_left * factor;
