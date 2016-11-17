@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 project(imageverify)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(ENV{CPPFLAGS} "-I${CMAKE_CURRENT_SOURCE_DIR}/external/include $ENV{CPPFLAGS}")
+set(ENV{CPPFLAGS} "-I${CMAKE_CURRENT_SOURCE_DIR}/external/include $ENV{CPPFLAGS} -DFT_DEBUG_LEVEL_TRACE")
 set(ENV{LDFLAGS} "-L${CMAKE_CURRENT_SOURCE_DIR}/external/lib $ENV{LDFLAGS}")
 set(ENV{PATH} "${CMAKE_CURRENT_SOURCE_DIR}/external/bin:$ENV{PATH}")
 set(ENV{LD_LIBRARY_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/external/lib")
@@ -27,7 +27,7 @@ if(APPLE)
 endif()
 
 if(UNIX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -std=gnu++14")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
 endif()
 
@@ -54,12 +54,22 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 include(ExternalProject)
 
 ExternalProject_Add(
+  external_halide
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL https://github.com/halide/Halide/releases/download/release_2016_10_25/halide-mac-64-trunk-aa5d5514f179bf0ffe1a2dead0c0eb7300b4069a.tgz
+  CONFIGURE_COMMAND true
+  BUILD_COMMAND true
+  INSTALL_COMMAND cp -rf bin include lib ${CMAKE_CURRENT_SOURCE_DIR}/external
+  BUILD_IN_SOURCE 1
+)
+
+ExternalProject_Add(
   external_gtest
   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
   URL https://github.com/google/googletest/archive/release-1.8.0.zip
   BUILD_COMMAND ../../../scripts/with_env make
   BUILD_IN_SOURCE 1
-  CMAKE_GENERATOR Unix Makefiles
+  CMAKE_GENERATOR "Unix Makefiles"
 )
 
 ExternalProject_Add(
@@ -219,6 +229,16 @@ ExternalProject_Add(
   DEPENDS external_freetype external_harfbuzz external_glib external_fontconfig
 )
 
+ExternalProject_Add(
+  external_ffmpeg
+  PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/external
+  URL https://www.ffmpeg.org/releases/ffmpeg-3.1.2.tar.gz
+  CONFIGURE_COMMAND ../../../scripts/configure_with_env --disable-all --enable-swscale --disable-asm
+  BUILD_COMMAND make
+  BUILD_IN_SOURCE 1
+  DEPENDS external_pkg_config
+)
+
 add_dependencies(imageverify
   imageverify_static
   imageverify_shared
@@ -239,10 +259,12 @@ add_dependencies(imageverify_shared
   external_harfbuzz
   external_raqm
   external_pango
+  external_halide
+  external_ffmpeg
 )
 
 add_dependencies(imageverify_test imageverify external_gtest)
 
-target_link_libraries(imageverify_shared jpeg pangoft2-1.0 pango-1.0 freetype raqm)
-target_link_libraries(imageverify jpeg pangoft2-1.0 pango-1.0 freetype raqm)
-target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2-1.0 pango-1.0 freetype raqm)
+target_link_libraries(imageverify_shared jpeg pangoft2-1.0 pango-1.0 fontconfig freetype raqm swscale avutil)
+target_link_libraries(imageverify jpeg pangoft2-1.0 pango-1.0 fontconfig freetype raqm swscale avutil)
+target_link_libraries(imageverify_test gtest gtest_main jpeg pangoft2-1.0 pango-1.0 fontconfig freetype raqm swscale avutil)

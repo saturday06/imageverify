@@ -2,7 +2,7 @@
 
 prefix=$(cd `dirname $0`; cd ../external; pwd)
 
-export CPPFLAGS="-I$prefix/include $CPPFLAGS"
+export CPPFLAGS="-I$prefix/include -DFT_DEBUG_LEVEL_TRACE $CPPFLAGS"
 export CFLAGS="-O0 -g $CFLAGS"
 export CXXFLAGS="-O0 -g $CXXFLAGS"
 export LDFLAGS="-L$prefix/lib $LDFLAGS"
